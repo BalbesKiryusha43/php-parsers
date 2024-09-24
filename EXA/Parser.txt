@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Feeds\Vendors\EXA;
+
+use App\Feeds\Parser\HtmlParser;
+
+class Parser extends HtmlParser
+{
+    public function getMpn(): string
+    {
+        return $this->getText('div.product_meta');
+    }
+    public function getRawProduct(): string
+    {
+        return $this->getText('h1.product_title.entry-title');
+    }
+    public function getImages(): array
+    {
+        return $this->getSrcImages('div.woocommerce-product-gallery__image img');
+    }
+
+    public function getCostToUs(): float
+    {
+        return $this->getMoney('p.price');
+    }
+    public function getRawDescription(): string
+    {
+        return $this->getHtml('div.woocommerce-Tabs-panel--description');
+    }
+}

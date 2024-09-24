@@ -1,0 +1,54 @@
+<?php
+
+namespace App\Feeds\Vendors\MII;
+
+use App\Feeds\Parser\XLSXParser;
+use App\Helpers\StringHelper;
+
+class PriceParser extends XLSXParser
+{
+    protected function parseRow(array $row, int $row_num): ?array
+    {
+        // Проверка на пустые строки
+        if (empty($row['PART #']) && empty($row['DESCRIPTION']) && empty($row['PRICE'])) {
+            return null;
+        }
+
+        // Получение данных из колонок
+        $mpn = $row['PART #'] ?? '';
+        $description = $row['DESCRIPTION'] ?? '';
+        $costToUs = isset($row['PRICE']) ? StringHelper::getMoney($row['PRICE']) : null;
+
+        // Если MPN пуст, пропустить эту строку
+        if (empty($mpn)) {
+            echo "Error: MPN is empty for row: " . json_encode($row) . PHP_EOL;
+            return null;
+        }
+
+        // Возврат массива данных продукта
+        return [
+            'mpn' => $mpn,
+            'description' => $description,
+            'cost_to_us' => $costToUs,
+        ];
+    }
+
+    public function getMpn(): string
+    {
+        return $this->getValueByColumnName('PART #');
+    }
+
+    public function getDescription(): string
+    {
+        return $this->getValueByColumnName('DESCRIPTION');
+    }
+
+    public function getCostToUs(): float
+    {
+        $cost = $this->getValueByColumnName('PRICE');
+        if (stripos($cost, 'Call for Quote') !== false) {
+            return 0.0;
+        }
+        return StringHelper::getMoney($cost);
+    }
+}

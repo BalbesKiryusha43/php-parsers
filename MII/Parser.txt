@@ -1,0 +1,38 @@
+<?php
+
+namespace App\Feeds\Vendors\MII;
+
+use App\Feeds\Parser\HtmlParser;
+
+class Parser extends HtmlParser
+{
+    public function getMpn(): string
+    {
+        return $this->getText('#SKUID');
+    }
+
+    public function getRawProduct(): string
+    {
+        return $this->getText('div.pro-detail-head');
+    }
+
+    public function getImages(): array
+    {
+        return $this->getSrcImages('img.main-img');
+    }
+
+    public function getCostToUs(): float
+    {
+        return $this->getMoney('#Price');
+    }
+
+    public function getRawDescription(): string
+    {
+        return $this->getHtml('pdr-details');
+    }
+    
+    public function getUrl(): string
+    {
+        return $this->getAttr('a.product-url', 'href');
+    }
+}

@@ -1,0 +1,15 @@
+<?php
+
+namespace App\Feeds\Vendors\EXA;
+
+use App\Feeds\Traits\GooglePriceTrait;
+
+use App\Feeds\Processor\SitemapHttpProcessor ;
+
+class Vendor extends SitemapHttpProcessor 
+{
+    use GooglePriceTrait;
+   
+    protected array $first = ['https://executiveapparel.com/product-sitemap.xml'];
+    public const PRICE_ACTIVE_SHEET = [ 1 ];
+}

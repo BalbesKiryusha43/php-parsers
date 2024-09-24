@@ -1,0 +1,14 @@
+<?php
+
+namespace App\Feeds\Vendors\MII;
+
+use App\Feeds\Processor\SitemapHttpProcessor ;
+use App\Feeds\Traits\GooglePriceTrait;
+
+class Vendor extends SitemapHttpProcessor 
+{
+    use GooglePriceTrait;
+
+    protected array $first = ['https://www.mutualindustries.com/categorysitemap.xml'];
+    public const PRICE_ACTIVE_SHEET = [ 1 ];
+}

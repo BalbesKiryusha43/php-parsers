@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Feeds\Vendors\EXA;
+
+use App\Feeds\Parser\XLSXParser;
+use App\Helpers\StringHelper;
+
+class PriceParser extends XLSXParser
+{
+    public function getMpn(): string
+    {
+        return $this->getValueByColumnName('Style');
+    }
+    public function getProductName(): string
+    {
+        return $this->getValueByColumnName('Item');
+    }
+    public function getCostToUs(): float
+    {
+        return StringHelper::getMoney( $this->getValueByColumnName( '1-36' ) );
+    }
+}
